@@ -1,49 +1,44 @@
-#dicionario como banco de dados
+# dicionario como banco de dados
 BANCO_PEDIDOS = {}
-#Compra para retirada na loja
-def comprar_retirada(cliente, livro):
+
+
+# Compra para retirada na loja
+def compra_retirada(cliente, livro):
     id_pedido = "PEDIDO_101"
     qrcode = "QR_PEDIDO_101"
 
-    #montando lista de dados do pedido
     pedido = {
         "id_pedido": id_pedido,
         "cliente": cliente,
         "livro": livro,
-        "status": status,
+        "status": "Pronto para Retirada",  # Aqui está com iniciais maiúsculas
         "qrcode": qrcode
     }
 
-    #salvando o pedido
     BANCO_PEDIDOS[qrcode] = pedido
     return pedido
 
-#Alerta de estoque baixo
 
+# Alerta de estoque baixo
 def verificar_alerta_estoque(livro, qtde_estoque):
-    #estoque = 1
-    if qtde_estoque ==1:
-        mensagem = "Estoque critico: resta apenas 1"
-        return mensagem
+    if qtde_estoque == 1:
+        return "Estoque critico: resta apenas 1"
     else:
-        mensagem = "Estoque regular"
-        return mensagem
+        return "Estoque regular"
 
-#Conferencia do qrcode na loja
 
+# Conferencia do qrcode na loja
 def validar_qr_code(qrcode):
-    #verifica se o qrcode esta no banco
     if qrcode in BANCO_PEDIDOS:
         pedido = BANCO_PEDIDOS[qrcode]
 
-        #mudanca de status: pronto para retirar > entregue
-        if pedido["status"] == "pronto para retirar":
-            pedido["status"] = "entregue"
+        # Ajustado para bater exatamente com "Pronto para Retirada"
+        if pedido["status"] == "Pronto para Retirada":
+            pedido["status"] = "Entregue"
 
-            return "Retirada concluída"
+            # Retornando um dicionário para o teste funcionar
+            return {"sucesso": True, "mensagem": "Retirada concluída"}
         else:
-            return "Pedido não esta pronto para retirada"
-
+            return {"sucesso": False, "mensagem": "Pedido não está pronto para retirada"}
     else:
-        #qrcode nao existe
-        return "QRCODE INEXISTENTE, CONSULTE UM ATENDENTE"
+        return {"sucesso": False, "mensagem": "QRCODE INEXISTENTE, CONSULTE UM ATENDENTE"}
